@@ -66,6 +66,22 @@
 		    <artifactId>thymeleaf-layout-dialect</artifactId>
 		</dependency>
 		
+		<!-- 동적쿼리 생성을 위한 QueryDSL 라이브러리 추가 -->
+		<!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-apt -->
+		<dependency>
+		    <groupId>com.querydsl</groupId>
+		    <artifactId>querydsl-apt</artifactId>
+		    <scope>provided</scope>
+		</dependency>
+		
+		
+		<!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa -->
+		<dependency>
+		    <groupId>com.querydsl</groupId>
+		    <artifactId>querydsl-jpa</artifactId>
+		</dependency>
+				
+		
 	</dependencies>
 
 	<build>
@@ -73,6 +89,23 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			
+			<plugin>
+				<groupId>com.mysema.maven</groupId>
+				<artifactId>apt-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>process</goal>
+						</goals>
+						
+						<configuration>
+							<outputDirectory>target/generated-sources/java</outputDirectory>
+							<processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
