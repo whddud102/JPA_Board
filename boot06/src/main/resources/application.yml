@@ -1,1 +1,29 @@
+spring :
+   datasource :
+      driver-class-name : com.mysql.cj.jdbc.Driver
+      url : jdbc:mysql://localhost:3306/jpa_ex?useSSL=false&serverTimezone=Asia/Seoul
+      username : jpa_user
+      password : jpa_user
+      
+   thymeleaf :
+      cache : false   # 서버에 뷰의 캐시를 저장하지 않도록 설정, 뷰 변경 시, 서버에 저장할 필요가 없으므로 재시작 하지 않도록 함
+      
+              
+      
+   jpa :
+      hibernate :
+         ddl-auto : update
+      generate-ddl : false
+      show-sql : true
+      database : mysql
+      datbase-platform : org.hibernate.dialect.MySQL5InnoDBDialect
 
+logging :
+   level :
+      org :
+         hibernate : info
+         springframework :
+            web : info
+         zerock : info            
+         
+               
