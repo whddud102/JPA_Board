@@ -3,9 +3,27 @@ xmlns:layout="http://www.ultrq.net.nz/tyhmeleaf/layout"
 layout:decorate="~{/layout/layout1}">
 
 <div layout:fragment="content">
+
 	<div class="panel-heading">List Page</div>
 	<div class="panel-body">
-		list Content...
+		<p>[[${result}]]</p>
+		
+		<div th:with="result=${result.result}">
+			<ul class="list-group">
+				<li class="list-group-item" th:each="board:${result.content}">[[${board}]]</li>
+			</ul>
+			
+		</div>
+		
+		<!-- Paging 영역 -->
+		<nav>
+			<div>
+				<ul class="pagination">
+					<li th:each="p:${result.pageList}"><a href="#">[[${p.pageNumber + 1}]]</a></li>
+				</ul>
+			</div>
+		</nav>
+		
 	</div>
 </div>
 
