@@ -28,7 +28,7 @@ public class WebBoardController {
 		
 		Pageable page = vo.makePageable(0, "bno");	// 전달 받은 파라미터를 이용해서 paging 처리에 필요한 pageable 생성 , bno 기준 내림차순 정렬
 		
-		Page<WebBoard> result = repo.findAll(repo.makePredicate(null, null), page);
+		Page<WebBoard> result = repo.findAll(repo.makePredicate(vo.getType(), vo.getKeyword()), page);
 		
 		log.info("------ 게시글 목록 페이지 요청 ------");
 		log.info("PageVO : " + page);

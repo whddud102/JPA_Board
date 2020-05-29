@@ -30,6 +30,18 @@ layout:decorate="~{/layout/layout1}">
 			</table>
 		</div>
 		
+		<div>
+			<select id="searchType">
+				<option selected="selected">검색 조건</option>
+				<option value="t" th:selected="${pageVO.type == 't'}">제목</option>
+				<option value="c" th:selected="${pageVO.type == 'c'}">내용</option>
+				<option value="w" th:selected="${pageVO.type == 'w'}">작성자</option>
+			</select>
+			
+			<input type="text" id="searchKeyword" th:value="${pageVO.keyword}">
+			<button id="searchBtn">검색</button>
+		</div>
+		
 		<!-- Paging 영역 -->
 		<nav>
 			<div>
@@ -46,6 +58,8 @@ layout:decorate="~{/layout/layout1}">
 		<form id="f1" method="get" th:action="@{list}">
 			<input type="hidden" th:value="${result.currentPageNum}" name="page">
 			<input type="hidden" th:value="${result.currentPage.pageSize}" name="size">
+			<input type="hidden" th:value="${pageVO.type}" name="type">
+			<input type="hidden" th:value="${pageVO.keyword}" name="keyword">
 			
 		</form>
 		
@@ -70,6 +84,19 @@ layout:decorate="~{/layout/layout1}">
 			// name이 page 인 input 태그의 값을 클릭된 페이지 버튼의 페이지 값으로 변경
 			formObj.find('[name = "page"]').val($(this).attr("href"));
 			
+			formObj.submit();
+		});
+		
+		$("#searchBtn").click(function(e) {
+			var type = $("#searchType").find(":selected").val();
+			var keyword = $("#searchKeyword").val();
+			
+			console.log(type, "", keyword);
+			
+			// 검색 조건, 키워드를 세팅하고, 1페이지로 이동하도록 설정
+			formObj.find("[name='type']").val(type);
+			formObj.find("[name='keyword']").val(keyword);
+			formObj.find("[name='page']").val(1);
 			formObj.submit();
 		});
 	});

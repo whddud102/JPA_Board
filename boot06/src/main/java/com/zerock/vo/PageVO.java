@@ -17,6 +17,26 @@ public class PageVO {
 	private int page;
 	private int size;
 	
+	// 검색 키워드와 타입을 수집하도록 변경
+	private String keyword;	// 검색 키워드
+	private String type;	// 검색 타입
+
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public PageVO() {
 		// 기본 page와 size 값을 기본 생성자에서 지정
 		this.page = 1;
