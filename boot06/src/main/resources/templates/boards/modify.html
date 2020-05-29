@@ -67,6 +67,7 @@ layout:decorate="~{/layout/layout1}">
 				formObj.attr("action", "delete");
 				formObj.attr("method", "post");
 				
+				history.replaceState(null, null, null);
 				formObj.submit();
 			});
 			
@@ -76,6 +77,7 @@ layout:decorate="~{/layout/layout1}">
 				formObj.attr("action", "modify");
 				formObj.attr("method", "post");
 				
+				history.replaceState(null, null, null);
 				formObj.submit();
 			});
 		});

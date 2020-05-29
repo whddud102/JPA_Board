@@ -49,6 +49,16 @@ layout:decorate="~{/layout/layout1}">
 
 <th:block layout:fragment="script">
 	<script th:inline="javascript">
+	
+	$(document).ready(function() {
+			var msg = [[${msg}]];
+			
+			if(!history.state && msg == 'modified') {
+				alert("수정 완료");
+				history.replaceState({}, null, null);
+			}
+	});
+	
 	</script>
 </th:block>
 

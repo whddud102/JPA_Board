@@ -121,12 +121,18 @@ layout:decorate="~{/layout/layout1}">
 	
 	$(window).load(function() {
 		var msg = [[${msg}]];
+		var stateObj = null;	// 상태 객체 생성
 		
-		if(msg == 'success') {
-			alert("게시글 등록 완료");
-			var statObj = {msg : ""};	// 상태 객체 생성
-		} else if(msg == 'deleted') {
-			alert("게시글 삭제 완료");
+		console.log("hisotry의 state 값 : " + history.state);
+		
+		if(!history.state) {
+			if(msg == 'success') {
+				alert("게시글 등록 완료");
+				history.replaceState({}, null, null);
+			} else if(msg == 'deleted') {
+				alert("게시글 삭제 완료");
+				history.replaceState({}, null, null);
+			}
 		}
 	});
 	
