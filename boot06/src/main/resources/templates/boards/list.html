@@ -104,6 +104,19 @@ layout:decorate="~{/layout/layout1}">
 			formObj.find("[name='page']").val(1);
 			formObj.submit();
 		});
+		
+		
+		$(".boardLink").click(function(e) {
+			e.preventDefault();
+
+			var boardNo = $(this).attr("href");
+			
+			formObj.attr("action", [[@{'/boards/view'}]]);
+			// form 태그에 게시글 번호 전달을 위한 input 태그 추가
+			formObj.append("<input type='hidden' name='bno' value='" + boardNo + "'>'");
+			
+			formObj.submit();
+		});
 	});
 	
 	$(window).load(function() {
@@ -114,5 +127,5 @@ layout:decorate="~{/layout/layout1}">
 			var statObj = {msg : ""};	// 상태 객체 생성
 		}
 	});
-
+	
 </script>
