@@ -6,7 +6,7 @@ layout:decorate="~{/layout/layout1}">
 
 	<div class="panel-heading">List Page</div>
 	<div class="panel-body">
-		<p>[[${result}]]</p>
+		<p>[[${result.result}]]</p>
 		
 		<div th:with="result=${result.result}">
 			<ul class="list-group">
@@ -19,17 +19,44 @@ layout:decorate="~{/layout/layout1}">
 		<nav>
 			<div>
 				<ul class="pagination">
-					<li th:each="p:${result.pageList}"><a href="#">[[${p.pageNumber + 1}]]</a></li>
+					<li class="page-item" th:if="${result.prevPage}"><a th:href="${result.prevPage.pageNumber} + 1">&lt;</a></li>				
+					<li class="page-item" th:classappend="${p.pageNumber == result.currentPageNum-1} ? 'active' : '' " th:each="p:${result.pageList}"><a th:href="${p.pageNumber} + 1">[[${p.pageNumber + 1}]]</a></li>
+					<li class="page-item" th:if="${result.nextPage}"><a th:href="${result.nextPage.pageNumber} + 1">&gt;</a></li>
 				</ul>
 			</div>
 		</nav>
 		
+		<!-- 페이지 이동을 위한 정보를 담은 hidden 태그 -->
+		<!-- 현재 페이지 번호, 현제 페이지의 아이템 개수를 저장 -->
+		<form id="f1" method="get" th:action="@{list}">
+			<input type="hidden" th:value="${result.currentPageNum}" name="page">
+			<input type="hidden" th:value="${result.currentPage.pageSize}" name="size">
+			
+		</form>
+		
 	</div>
+	<!-- /.Panel Body -->
 </div>
+<!-- /.fragment -->
 
 
 <th:block layout:fragment="script">
-
+	
 <script th:inline="javascript">
+	$(document).ready(function() {
+		// form 태그를 가져옴
+		var formObj = $("#f1");
+		
+		// pagination 클래스를 가진 a 태그에 접근
+		// a 태그가 클릭 되었을 때 이벤트 리스너
+		$(".pagination a").click(function(e) {
+			e.preventDefault();
+			
+			// name이 page 인 input 태그의 값을 클릭된 페이지 버튼의 페이지 값으로 변경
+			formObj.find('[name = "page"]').val($(this).attr("href"));
+			
+			formObj.submit();
+		});
+	});
 
 </script>
