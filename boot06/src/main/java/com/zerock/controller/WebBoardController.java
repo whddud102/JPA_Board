@@ -70,4 +70,52 @@ public class WebBoardController {
 			model.addAttribute("board", board);
 		});
 	}
+	
+	@GetMapping("/modify")
+	public void modify(Long bno, @ModelAttribute("pageVO") PageVO vo, Model model) {
+		log.info("---------- 게시글 수정 요청 ----------");
+		
+		repo.findById(bno).ifPresent(board -> {
+			model.addAttribute("board", board);
+		});
+	}
+	
+	@PostMapping("/delete")
+	public String delete(Long bno, PageVO vo, RedirectAttributes rttr) {
+		log.info("------- 게시글 삭제 요청 ------------");
+		
+		repo.deleteById(bno);
+		
+		rttr.addFlashAttribute("msg", "deleted");
+		rttr.addAttribute("page", vo.getPage());
+		rttr.addAttribute("size", vo.getSize());
+		rttr.addAttribute("type", vo.getType());
+		rttr.addAttribute("keyword", vo.getKeyword());
+		
+		return "redirect:/boards/list";
+	}
+	
+	
+	@PostMapping("/modify")
+	public String modifyPost(WebBoard board, PageVO vo, RedirectAttributes rttr) {
+		log.info("-------- " + board.getBno() + "번 게시글 수정 요청 ------------");
+		
+		repo.findById(board.getBno()).ifPresent(origin -> {
+			origin.setTitle(board.getTitle());
+			origin.setContent(board.getContent());
+			
+			repo.save(origin);
+			
+			rttr.addFlashAttribute("msg", "modified");
+			rttr.addAttribute("bno", board.getBno());
+			
+		});
+		
+		rttr.addAttribute("page", vo.getPage());
+		rttr.addAttribute("size", vo.getSize());
+		rttr.addAttribute("type", vo.getType());
+		rttr.addAttribute("keyword", vo.getKeyword());
+		
+		return "redirect:/boards/view";
+	}
 }

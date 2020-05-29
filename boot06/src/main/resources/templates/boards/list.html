@@ -125,6 +125,8 @@ layout:decorate="~{/layout/layout1}">
 		if(msg == 'success') {
 			alert("게시글 등록 완료");
 			var statObj = {msg : ""};	// 상태 객체 생성
+		} else if(msg == 'deleted') {
+			alert("게시글 삭제 완료");
 		}
 	});
 	
