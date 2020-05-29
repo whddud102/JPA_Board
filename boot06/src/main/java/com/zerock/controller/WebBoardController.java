@@ -6,7 +6,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.zerock.domain.WebBoard;
 import com.zerock.repository.WebBoardRepository;
@@ -37,5 +40,25 @@ public class WebBoardController {
 		
 		// pageMaker를 뷰에 전달
 		model.addAttribute("result", new PageMaker<>(result));
+	}
+	
+	
+	@GetMapping("/register")
+	public void registerGET() {
+		log.info("---- 게시글 등록 화면 요청 -----");
+	}
+	
+	@PostMapping("/register")
+	public String registerPOST(@ModelAttribute("vo") WebBoard vo, RedirectAttributes rttr) {
+		log.info("-------- 게시글을 등록 합니다 ---------");
+		log.info(vo.toString());
+		
+		repo.save(vo);
+		
+		log.info("---- 게시글 등록 완료 ------");
+		
+		rttr.addFlashAttribute("msg", "success");
+		
+		return "redirect:/boards/list";
 	}
 }
