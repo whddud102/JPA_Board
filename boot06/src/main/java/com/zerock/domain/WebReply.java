@@ -1,17 +1,18 @@
 package com.zerock.domain;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -20,28 +21,26 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString(exclude = "replies")
+@ToString(exclude = "board")
 @Entity
-@Table(name = "tbl_webboards")
-@EqualsAndHashCode(of = "bno")
-public class WebBoard {
+@Table(name = "tbl_webreplies")
+@EqualsAndHashCode(of = "rno")
+public class WebReply {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)	// MySQL에 키 생성 위임
-	private Long bno;
-	private String title;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long rno;
 	
-	private String writer;
+	private String replyText;
 	
-	private String content;
+	private String replyer;
 	
-	
-	// 엔티티의 생성, 수정 시 자동으로 TimeStamp 값을 기록해주는 어노테이션
-	@CreationTimestamp	
+	@CreationTimestamp
 	private Timestamp regdate;
 	@UpdateTimestamp
 	private Timestamp updatedate;
 	
-	@OneToMany(mappedBy = "board")
-	private List<WebReply> replies;
+	@ManyToOne
+	@JsonIgnore
+	private WebBoard board;
 }
