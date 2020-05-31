@@ -33,7 +33,15 @@ var replyManager = (function() {
 	};
 	
 	var remove = function(obj, callback) {
-		console.log("--- 댓글 삭제 요청 -------");
+		console.log("--- 댓글 삭제 요청 ----");
+		
+		$.ajax({
+			type: "delete",
+			url : "/replies/" + obj.bno + "/" + obj.rno,
+			dataType : "json",
+			contentType : "application/json",
+			success : callback
+		});
 	};
 	
 	return {

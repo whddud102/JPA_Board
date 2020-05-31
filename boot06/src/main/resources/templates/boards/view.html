@@ -83,6 +83,7 @@ layout:decorate="~{/layout/layout1}">
 			</div>
 			
 			<div class="modal-footer">
+				<button id="delModalBtn" class="btn btn-danger">삭 제</button>
 				<button id="modalBtn" class="btn btn-info">등 록</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal">닫 기</button>
 			</div>
@@ -111,6 +112,7 @@ layout:decorate="~{/layout/layout1}">
 	
 		var mode;
 		var bno = [[${board.bno}]];
+		var rno;
 		var replyTextTag = $("input[name='replyText']");
 		var replyerTag = $("input[name='replyer']");
 		
@@ -145,6 +147,35 @@ layout:decorate="~{/layout/layout1}">
 			$(".modal-title").text("댓글 등록");
 			
 			mode="ADD";			
+		});
+
+		$("#delModalBtn").on("click", function() {
+			
+			// 댓글 삭제 요청에 필요한 속성을 갖고 있는 객체를 전달
+			var obj = {bno : bno, rno : rno};
+			replyManager.remove(obj, function list(list) {
+				printList(list);
+				
+				alert("댓글이 삭제되었습니다.");
+				$("#myModal").modal("hide");
+				replyTextTag.val("");
+				replyerTag.val("");
+			});
+		});
+		
+		
+		$("#replyTable").on("click", "tr", function(e) {
+			var tds = $(this).find('td');
+			
+			// 클릭된 댓글의 번호 추출
+			rno = tds[0].innerHTML;
+			mode = 'MOD';
+			
+			// 모달 창의 input 태그를 채워넣음
+			replyTextTag.val(tds[1].innerHTML);
+			replyerTag.val(tds[2].innerHTML);
+			$("#myModal").modal("show");
+			$(".modal-title").text("댓글 수정/삭제");
 		});
 		
 		var msg = [[${msg}]];
