@@ -42,23 +42,78 @@ layout:decorate="~{/layout/layout1}">
 				bno=${board.bno})}" class="btn btn-primary">목록으로</a>
 		</div>
 		
+</div>
+<!-- /.panel-body -->		
+	<div class="panel-body">
+			<table class="table table-striped table-bordered table-hober">
+				<thead>
+					<tr>
+						<th>번호</th>			
+						<th>내 용</th>
+						<th>작 성 자</th>
+						<th>작 성 일</th>
+					</tr>
+				</thead>
+				
+				<tbody id="replyTable"></tbody>
+			</table>
 	</div>
-	
 </div>
 <!-- end Fragment -->
 
 <th:block layout:fragment="script">
+	<!-- 댓글 처리를 위한 replyManager 객체 생성 코드 -->
+	<script th:inline="javascript" th:src="@{/js/reply.js}"></script>
+
 	<script th:inline="javascript">
-	
-	$(document).ready(function() {
-			var msg = [[${msg}]];
+	$(document).ready(function(e) {
+		
+		(function() {
 			
-			if(!history.state && msg == 'modified') {
-				alert("수정 완료");
-				history.replaceState({}, null, null);
-			}
+			// 댓글 목록 조회
+			replyManager.getAll([[${board.bno}]], printList);
+		})();
+		
+		var msg = [[${msg}]];
+			
+		if(!history.state && msg == 'modified') {
+			alert("수정 완료");
+			history.replaceState({}, null, null);
+		}
 	});
 	
+	</script>
+	
+	
+	<script>
+		function printList(list) {
+			var str = "";
+			var replyObj;
+			
+			// 동적으로 댓글 html 코드 생성
+			for(var i = 0; i < list.length; i++) {
+				replyObj = list[i];
+				
+				console.log(replyObj);
+				
+				str += "<tr>"
+						+ "<td>" + replyObj.rno + "</td>"
+						+ "<td>" + replyObj.replyText + "</td>"
+						+ "<td>" + replyObj.replyer + "</td>"
+						+ "<td>" + formatDate(replyObj.regdate) + "</td>";
+					+ "</tr>";
+			}
+			
+			$("#replyTable").html(str);
+		}
+		
+		
+		function formatDate(timeValue) {
+			var date = new Date(timeValue);
+			
+			return date.getFullYear() + "-" + (date.getMonth()+1 >= 10 ? date.getMonth()+1 : "0" + (date.getMonth()+1))
+			+ "-" + date.getDate();
+		}
 	</script>
 </th:block>
 
