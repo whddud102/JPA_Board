@@ -4,15 +4,28 @@
 
 var replyManager = (function() {
 	
+	/**
+	 * obj : 댓글 객체
+	 * callback : 성공 콜백 함수
+	 */
 	var getAll = function(obj, callback) {
-		console.log("--- 댓글 목록 조회 -------");
+		console.log("--- 댓글 목록 조회 요청 ---");
 		
 		$.getJSON("/replies/" + obj, callback);
 		
 	};
 	
 	var add = function(obj, callback) {
-		console.log("--- 댓글 등록 요청  -------");
+		console.log("--- 댓글 등록 요청  ---");
+		
+		$.ajax({
+			type: "post",
+			url : "/replies/" + obj.bno,
+			data : JSON.stringify(obj),
+			dataType : 'json',
+			contentType : "application/json",
+			success : callback
+		});
 	};
 	
 	var update = function(obj, callback) {
