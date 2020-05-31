@@ -39,7 +39,7 @@ public class WebReplyController {
 	@Transactional
 	@PostMapping("/{bno}")
 	public ResponseEntity<List<WebReply>> addReply(@RequestBody WebReply newReply, @PathVariable("bno") Long bno) {
-		log.info("-------- 댓글 등록 요청 ----------");
+		log.info("\n-------- 댓글 등록 요청 ----------");
 		log.info("게시글 번호 : " + bno);
 		log.info("댓글 : " + newReply);
 		
@@ -56,7 +56,7 @@ public class WebReplyController {
 	@Transactional
 	@DeleteMapping("/{bno}/{rno}")
 	public ResponseEntity<List<WebReply>> remove(@PathVariable("bno") Long bno, @PathVariable("rno") Long rno) {
-		log.info("--------" + bno + "번 게시글의 " + rno + "번 댓글 삭제 요청 ----------");
+		log.info("\n--------" + bno + "번 게시글의 " + rno + "번 댓글 삭제 요청 ----------");
 		
 		// 댓글 삭제
 		replyRepo.deleteById(rno);
@@ -70,7 +70,7 @@ public class WebReplyController {
 	@Transactional
 	@PutMapping("/{bno}")
 	public ResponseEntity<List<WebReply>> modify(@PathVariable("bno") Long bno, @RequestBody WebReply reply) {
-		log.info("--------- 댓글 수정 요청 -------------");
+		log.info("\n--------- 댓글 수정 요청 -------------");
 		
 		replyRepo.findById(reply.getRno()).ifPresent(origin -> {
 			log.info("댓글 내용을 수정 합니다 : (" + reply.getReplyText() + " )");
@@ -78,7 +78,7 @@ public class WebReplyController {
 			
 			replyRepo.save(origin);	// 변경 사항 반영
 			
-			log.info(" ----------- 댓글 수정 완료 ------------");
+			log.info("\n----------- 댓글 수정 완료 ------------");
 		});
 		
 		// 댓글 목록 조회를 위한 게시글 객체 생성
@@ -91,7 +91,7 @@ public class WebReplyController {
 	@GetMapping("/{bno}")
 	public ResponseEntity<List<WebReply>> getReplies(@PathVariable("bno") Long bno) {
 
-		log.info("------------" + bno + "번 게시글의 댓글 목록 조회 요청 ---------------");
+		log.info("\n------------" + bno + "번 게시글의 댓글 목록 조회 요청 ---------------");
 		WebBoard board = new WebBoard();
 		board.setBno(bno);
 		return new ResponseEntity<List<WebReply>>(getListByBoard(board), HttpStatus.OK);
@@ -104,7 +104,7 @@ public class WebReplyController {
 	 * @throws RuntimeException
 	 */
 	private List<WebReply> getListByBoard(WebBoard board) throws RuntimeException{
-		log.info("------- getListByBoard() : 댓글 목록을 조회합니다 -----------");
+		log.info("\n------- getListByBoard() : 댓글 목록을 조회합니다 -----------");
 		return replyRepo.getRepliesOfBoard(board);
 	}
 }
