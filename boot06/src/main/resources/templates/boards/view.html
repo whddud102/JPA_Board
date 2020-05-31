@@ -117,11 +117,12 @@ layout:decorate="~{/layout/layout1}">
 		var replyerTag = $("input[name='replyer']");
 		
 		$("#modalBtn").click(function(e) {
+			
+			var replyText = replyTextTag.val();
+			var replyer = replyerTag.val();
+			
 			// 댓글 등록 작업일 경우
 			if(mode == 'ADD') {
-				var replyText = replyTextTag.val();
-				var replyer = replyerTag.val();
-				
 				var replyObj = {
 						replyText : replyText,
 						replyer : replyer,
@@ -130,13 +131,14 @@ layout:decorate="~{/layout/layout1}">
 				
 				replyManager.add(replyObj, function(list) {
 					// 댓글 목록 출력
-					printList(list);
 					alert("댓글 등록 완료.");
-					$("#myModal").modal("hide");
-					
-					// 입력 태그의 값을 비움
-					replyTextTag.val("");
-					replyerTag.val("");
+					afterAll(list);
+				});
+			} else if(mode == 'MOD') {
+				var updatedReply = {replyText : replyText, bno : bno, rno : rno};
+				replyManager.update(updatedReply, function (list) {
+					alert("댓글 수정 완료");
+					afterAll(list);
 				});
 			}
 		});
@@ -214,6 +216,13 @@ layout:decorate="~{/layout/layout1}">
 			
 			return date.getFullYear() + "-" + (date.getMonth()+1 >= 10 ? date.getMonth()+1 : "0" + (date.getMonth()+1))
 			+ "-" + date.getDate();
+		}
+		
+		function afterAll(list) {
+			printList(list);
+			$("#myModal").modal("hide");
+			replyTextTag.val("");
+			replyerTag.val("");
 		}
 	</script>
 </th:block>

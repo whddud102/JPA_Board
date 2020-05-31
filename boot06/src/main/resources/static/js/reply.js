@@ -29,7 +29,16 @@ var replyManager = (function() {
 	};
 	
 	var update = function(obj, callback) {
-		console.log("--- 댓글 수정 요청 -------");
+		console.log("--- 댓글 수정 요청 ---");
+		
+		$.ajax({
+			type : "put",
+			url : "/replies/" + obj.bno,
+			dataType : "json",
+			data : JSON.stringify(obj),
+			contentType : "application/json",
+			success : callback
+		});
 	};
 	
 	var remove = function(obj, callback) {
