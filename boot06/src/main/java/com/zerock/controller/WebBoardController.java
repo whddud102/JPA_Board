@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.zerock.domain.WebBoard;
+import com.zerock.persistence.CustomCrudRepository;
 import com.zerock.repository.WebBoardRepository;
 import com.zerock.vo.PageMaker;
 import com.zerock.vo.PageVO;
@@ -23,15 +24,17 @@ import lombok.extern.java.Log;
 @RequestMapping("/boards/")
 public class WebBoardController {
 	
+	// 동적으로  사용자 정의 쿼리를 생성하는 사용자 정의 리포지터리를 주입 받도록 변경
 	@Autowired
-	private WebBoardRepository repo;
+	private CustomCrudRepository repo;
 	
 	@GetMapping("/list")
 	public void list(PageVO vo, Model model) {	// PageVO 객체를 파라미터로 수집
 		
 		Pageable page = vo.makePageable(0, "bno");	// 전달 받은 파라미터를 이용해서 paging 처리에 필요한 pageable 생성 , bno 기준 내림차순 정렬
 		
-		Page<WebBoard> result = repo.findAll(repo.makePredicate(vo.getType(), vo.getKeyword()), page);
+		// 동적으로 쿼리를 생성해서 결과를 받아 오는 getCustomPage() 이용
+		Page<Object[]> result = repo.getCustomPage(vo.getType(), vo.getKeyword(), page);
 		
 		log.info("------ 게시글 목록 페이지 요청 ------");
 		log.info("PageVO : " + page);
