@@ -1,0 +1,49 @@
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{/layout/layout1}">
+
+<div layout:fragment="content">
+
+	<div class="panel-heading">로그인 페이지</div>
+	
+	<div class="panel-body">
+		<div th:if="${param.error != null}">
+			<h2>유효하지 않은 아이디 또는 패스워드 입니다</h2>
+			<h2 th:value="${param.error}"></h2>
+		</div>
+		
+		<div th:if="${param.logout != null}">
+			<h2>로그아웃 하였습니다</h2>
+		</div>
+		
+			<form method="post">
+				<p>
+					<label for="username">아 이 디</label>
+					<input type="text" id="username" name="username" value="user88">
+				</p>
+				
+				<p>
+					<label for="password">비밀번호</label>
+					<input type="password" id="password" name="password" value="pw88">
+				</p>
+				
+				<p>
+					<label for="username">자동 로그인</label>
+					<input type="checkbox" id="remember-me" name="remember-me">
+				</p>
+				
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+				<button type="submit" class="btn">로그인</button>
+			</form>
+	</div>
+	<!-- /.panel-body -->
+</div>
+	
+	<th:block layout:fragment="script">
+		<script th:inline="javascript">
+		
+		</script>
+	
+	</th:block>
+	
+</html>
