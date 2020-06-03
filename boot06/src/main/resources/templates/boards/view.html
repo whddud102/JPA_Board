@@ -1,5 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
 xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
 layout:decorate="~{/layout/layout1}">
 
 <div layout:fragment="content">
@@ -27,8 +28,8 @@ layout:decorate="~{/layout/layout1}">
 			<label>작 성 일</label> <input class="form-control" name="regDate" th:value="${#dates.format(board.regdate, 'yyyy-MM-dd')}" readonly="readonly">
 		</div>
 		
-		<div class="pull-left">
-			<a th:href="@{modify(
+		<div class="pull-left" th:with="uid=${#authentication.principal} eq 'anonymousUser' ? 'Guest' : ${#authentication.principal.member.uid}">
+			<a th:if="${uid} eq ${board.writer}" th:href="@{modify(
 				page=${pageVO.page}, 
 				size=${pageVO.size},
 				type=${pageVO.type},
