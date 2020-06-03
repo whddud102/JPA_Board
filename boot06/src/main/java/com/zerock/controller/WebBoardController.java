@@ -3,6 +3,7 @@ package com.zerock.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.zerock.domain.WebBoard;
 import com.zerock.persistence.CustomCrudRepository;
-import com.zerock.repository.WebBoardRepository;
 import com.zerock.vo.PageMaker;
 import com.zerock.vo.PageVO;
 
@@ -74,6 +74,7 @@ public class WebBoardController {
 		});
 	}
 	
+	@Secured(value = {"BASIC", "ROLE_MANAGER", "ROLE_ADMIN"})
 	@GetMapping("/modify")
 	public void modify(Long bno, @ModelAttribute("pageVO") PageVO vo, Model model) {
 		log.info("---------- 게시글 수정 요청 ----------");
@@ -83,6 +84,7 @@ public class WebBoardController {
 		});
 	}
 	
+	@Secured(value = {"BASIC", "ROLE_MANAGER", "ROLE_ADMIN"})
 	@PostMapping("/delete")
 	public String delete(Long bno, PageVO vo, RedirectAttributes rttr) {
 		log.info("------- 게시글 삭제 요청 ------------");
@@ -99,6 +101,7 @@ public class WebBoardController {
 	}
 	
 	
+	@Secured(value = {"BASIC", "ROLE_MANAGER", "ROLE_ADMIN"})
 	@PostMapping("/modify")
 	public String modifyPost(WebBoard board, PageVO vo, RedirectAttributes rttr) {
 		log.info("-------- " + board.getBno() + "번 게시글 수정 요청 ------------");
