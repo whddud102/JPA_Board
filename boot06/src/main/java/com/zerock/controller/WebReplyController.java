@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +22,6 @@ import com.zerock.domain.WebReply;
 import com.zerock.repository.WebReplyRepository;
 
 import lombok.extern.java.Log;
-import net.bytebuddy.asm.Advice.Origin;
 
 /**
  * 서비스 계층을 생략하고, 컨트롤러에서 바로 Persistence 영역을 제어할 것임
@@ -36,6 +36,7 @@ public class WebReplyController {
 	@Autowired
 	private WebReplyRepository replyRepo;
 	
+	@Secured(value = {"BASIC", "ROLE_MANAGER", "ROLE_ADMIN"})
 	@Transactional
 	@PostMapping("/{bno}")
 	public ResponseEntity<List<WebReply>> addReply(@RequestBody WebReply newReply, @PathVariable("bno") Long bno) {
@@ -53,6 +54,7 @@ public class WebReplyController {
 		return new ResponseEntity<List<WebReply>>(getListByBoard(board), HttpStatus.CREATED);
 	}
 	
+	@Secured(value = {"BASIC", "ROLE_MANAGER", "ROLE_ADMIN"})
 	@Transactional
 	@DeleteMapping("/{bno}/{rno}")
 	public ResponseEntity<List<WebReply>> remove(@PathVariable("bno") Long bno, @PathVariable("rno") Long rno) {
@@ -67,6 +69,7 @@ public class WebReplyController {
 		return new ResponseEntity<List<WebReply>>(getListByBoard(board), HttpStatus.OK);
 	}
 	
+	@Secured(value = {"BASIC", "ROLE_MANAGER", "ROLE_ADMIN"})
 	@Transactional
 	@PutMapping("/{bno}")
 	public ResponseEntity<List<WebReply>> modify(@PathVariable("bno") Long bno, @RequestBody WebReply reply) {

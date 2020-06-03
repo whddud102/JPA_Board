@@ -23,6 +23,10 @@ var replyManager = (function() {
 			url : "/replies/" + obj.bno,
 			data : JSON.stringify(obj),
 			dataType : 'json',
+			// 서버에 요청을 전송하기 전에, csrf 토큰 값을 헤더에 설정
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader(obj.csrf.headerName, obj.csrf.token);
+			},
 			contentType : "application/json",
 			success : callback
 		});

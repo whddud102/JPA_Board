@@ -5,6 +5,10 @@ layout:decorate="~{/layout/layout1}">
 
 <div layout:fragment="content">
 
+<!-- POST 방식으로 전송시, CSRF 토큰이 자동으로 전송되도록  의미없는 th 속성을 하나 사용 -->
+<!-- th:action 속성을 처리 하려면 반드시 csrf 토큰 값이 생성되어야 한다는 점을 이용 -->
+<form action="${'/login'}" method="post"></form>
+
 	<div class="panel-heading">게시글 조회</div>
 	<div class="panel-body">
 		
@@ -80,7 +84,7 @@ layout:decorate="~{/layout/layout1}">
 				<label>내 용</label>
 				<input type="text" class="form-control" name="replyText">
 				<label>작 성 자</label>
-				<input type="text" class="form-control" name="replyer">
+				<input type="text" class="form-control" name="replyer" readonly="readonly">
 			</div>
 			
 			<div class="modal-footer">
@@ -117,6 +121,12 @@ layout:decorate="~{/layout/layout1}">
 		var replyTextTag = $("input[name='replyText']");
 		var replyerTag = $("input[name='replyer']");
 		
+		// 사용자의 id, 로그인을 하지 않았다면 null
+		var uid = [[${#authentication.principal} eq 'anonymousUser' ? null : ${#authentication.principal.member.uid}]];
+		
+		// 스프링 시큐리티의 _csrf 객체를 문자열로 변환한 뒤, 그 문자열을 JSON.parse()를 이용해 자바스크립트 객체로 변환
+		var csrf = JSON.parse('[[${_csrf}]]');
+		
 		$("#modalBtn").click(function(e) {
 			
 			var replyText = replyTextTag.val();
@@ -127,12 +137,13 @@ layout:decorate="~{/layout/layout1}">
 				var replyObj = {
 						replyText : replyText,
 						replyer : replyer,
-						bno : bno
+						bno : bno,
+						csrf : csrf		// 댓글 등록 요청 시, csrf 자바스크립트 객체도 함께 전송
 				};
 				
 				replyManager.add(replyObj, function(list) {
 					// 댓글 목록 출력
-					alert("댓글 등록 완료.");
+					alert("댓글 등록 완료");
 					afterAll(list);
 				});
 			} else if(mode == 'MOD') {
@@ -146,6 +157,17 @@ layout:decorate="~{/layout/layout1}">
 		
 		
 		$("#addReplyBtn").on('click', function(e) {
+			
+			if(uid == null) {	// 로그인 하지 않은 경우
+				if(confirm("로그인할까요?")) {
+					self.location = [[@{/login}]];	// 로그인 페이지로 이동시킴
+				}
+				return;
+			}
+			
+			// 댓글 작성자 칸을 사용자의 id로 자동 입력
+			replyerTag.val(uid);
+			
 			$("#myModal").modal("show");
 			$(".modal-title").text("댓글 등록");
 			
