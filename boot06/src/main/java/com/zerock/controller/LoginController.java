@@ -1,0 +1,20 @@
+package com.zerock.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import lombok.extern.java.Log;
+
+@Controller
+@Log
+public class LoginController {
+	
+	@GetMapping("/login")
+	public void login() {}
+	
+	@GetMapping("/accessDenied")
+	public void accessDenied() {}
+	
+	@GetMapping("/logout")
+	public void logout() {}
+}
