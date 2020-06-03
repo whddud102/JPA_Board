@@ -17,4 +17,9 @@ public class LoginController {
 	
 	@GetMapping("/logout")
 	public void logout() {}
+	
+	@GetMapping({"", "/"})
+	public String goToMain() {
+		return "redirect:/boards/list";
+	}
 }
