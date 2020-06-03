@@ -24,6 +24,7 @@ logging :
          hibernate : info
          springframework :
             web : info
+            security : debug
          zerock : info            
          
                
