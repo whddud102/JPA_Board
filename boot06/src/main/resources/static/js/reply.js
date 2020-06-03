@@ -39,6 +39,10 @@ var replyManager = (function() {
 			type : "put",
 			url : "/replies/" + obj.bno,
 			dataType : "json",
+			// 서버에 요청을 전송하기 전에, csrf 토큰 값을 헤더에 설정
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader(obj.csrf.headerName, obj.csrf.token);
+			},
 			data : JSON.stringify(obj),
 			contentType : "application/json",
 			success : callback
@@ -52,6 +56,10 @@ var replyManager = (function() {
 			type: "delete",
 			url : "/replies/" + obj.bno + "/" + obj.rno,
 			dataType : "json",
+			// 서버에 요청을 전송하기 전에, csrf 토큰 값을 헤더에 설정
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader(obj.csrf.headerName, obj.csrf.token);
+			},
 			contentType : "application/json",
 			success : callback
 		});

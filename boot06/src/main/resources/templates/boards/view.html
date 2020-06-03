@@ -147,7 +147,7 @@ layout:decorate="~{/layout/layout1}">
 					afterAll(list);
 				});
 			} else if(mode == 'MOD') {
-				var updatedReply = {replyText : replyText, bno : bno, rno : rno};
+				var updatedReply = {replyText : replyText, bno : bno, rno : rno, replyer : replyer, csrf : csrf};
 				replyManager.update(updatedReply, function (list) {
 					alert("댓글 수정 완료");
 					afterAll(list);
@@ -167,9 +167,13 @@ layout:decorate="~{/layout/layout1}">
 			
 			// 댓글 작성자 칸을 사용자의 id로 자동 입력
 			replyerTag.val(uid);
+			// 댓글 내용 칸을 비워 줌
+			replyTextTag.val("");
+			
 			
 			$("#myModal").modal("show");
 			$(".modal-title").text("댓글 등록");
+			$("#modalBtn").html("등록");
 			
 			mode="ADD";			
 		});
@@ -177,7 +181,7 @@ layout:decorate="~{/layout/layout1}">
 		$("#delModalBtn").on("click", function() {
 			
 			// 댓글 삭제 요청에 필요한 속성을 갖고 있는 객체를 전달
-			var obj = {bno : bno, rno : rno};
+			var obj = {bno : bno, rno : rno, csrf : csrf};
 			replyManager.remove(obj, function list(list) {
 				printList(list);
 				
@@ -189,6 +193,7 @@ layout:decorate="~{/layout/layout1}">
 		});
 		
 		
+		// 댓글 영역이 눌렸을 때의 이벤트 처리
 		$("#replyTable").on("click", "tr", function(e) {
 			var tds = $(this).find('td');
 			
@@ -201,6 +206,19 @@ layout:decorate="~{/layout/layout1}">
 			replyerTag.val(tds[2].innerHTML);
 			$("#myModal").modal("show");
 			$(".modal-title").text("댓글 수정/삭제");
+			
+			// 사용자와 댓글 작성자가 다른 경우
+			if(uid != tds[2].innerHTML.trim()) {
+				// 수정/삭제 버튼 숨김
+				$("#delModalBtn").hide();
+				$("#modalBtn").hide();
+			} else {
+				$("#delModalBtn").show();
+				$("#modalBtn").show();
+				$("#modalBtn").html("수정");
+			}
+			
+			
 		});
 		
 		var msg = [[${msg}]];
@@ -214,7 +232,10 @@ layout:decorate="~{/layout/layout1}">
 	</script>
 	
 	<!-- 유틸 함수 -->
-	<script>
+<script>
+	var replyTextTag = $("input[name='replyText']");
+	var replyerTag = $("input[name='replyer']");
+	
 		function printList(list) {
 			var str = "";
 			var replyObj;
