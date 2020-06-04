@@ -37,9 +37,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.antMatchers("/boards/lists").permitAll()
 				.antMatchers("/boards/register").hasAnyRole("BASIC", "MANAGER", "ADMIN");
 		
-		http.formLogin().loginPage("/login");	// from 로그인 제공하겠다는 설정 (기본 경로 : /login)
+		http.formLogin().loginPage("/login").successHandler(new LoginSuccessHandler());	// from 로그인 제공하겠다는 설정 (기본 경로 : /login)
 		http.exceptionHandling().accessDeniedPage("/accessDenied");
-		http.logout().logoutUrl("/logout").invalidateHttpSession(true);
+		http.logout().logoutUrl("/logout").logoutSuccessUrl("/boards/list").invalidateHttpSession(true);
 		
 		http.rememberMe()
 		.key("jy")

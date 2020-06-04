@@ -7,7 +7,7 @@ layout:decorate="~{/layout/layout1}">
 
 <!-- POST 방식으로 전송시, CSRF 토큰이 자동으로 전송되도록  의미없는 th 속성을 하나 사용 -->
 <!-- th:action 속성을 처리 하려면 반드시 csrf 토큰 값이 생성되어야 한다는 점을 이용 -->
-<form action="${'/login'}" method="post"></form>
+<form th:action="${'/login'}" method="post"></form>
 
 	<div class="panel-heading">게시글 조회</div>
 	<div class="panel-body">
@@ -99,16 +99,12 @@ layout:decorate="~{/layout/layout1}">
 </div>
 <!-- end Fragment -->
 
-
-
-
 <th:block layout:fragment="script">
 	<!-- 댓글 처리를 위한 replyManager 객체 생성 코드 -->
 	<script th:inline="javascript" th:src="@{/js/reply.js}"></script>
 
 	<script th:inline="javascript">
 	$(document).ready(function(e) {
-		
 		(function() {
 			// 댓글 목록 조회
 			replyManager.getAll([[${board.bno}]], printList);
@@ -124,8 +120,9 @@ layout:decorate="~{/layout/layout1}">
 		// 사용자의 id, 로그인을 하지 않았다면 null
 		var uid = [[${#authentication.principal} eq 'anonymousUser' ? null : ${#authentication.principal.member.uid}]];
 		
+		
 		// 스프링 시큐리티의 _csrf 객체를 문자열로 변환한 뒤, 그 문자열을 JSON.parse()를 이용해 자바스크립트 객체로 변환
-		var csrf = JSON.parse('[[${_csrf}]]');
+			var csrf = JSON.parse('[[${_csrf}]]');
 		
 		$("#modalBtn").click(function(e) {
 			
@@ -160,7 +157,8 @@ layout:decorate="~{/layout/layout1}">
 			
 			if(uid == null) {	// 로그인 하지 않은 경우
 				if(confirm("로그인할까요?")) {
-					self.location = [[@{/login}]];	// 로그인 페이지로 이동시킴
+					// 로그인 페이지로 이동시킴, 파라미터로 현재 경로를 같이 전달
+					self.location = [[@{/login}]] + "?dest=" + encodeURIComponent(self.location) ;
 				}
 				return;
 			}
