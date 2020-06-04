@@ -1,13 +1,25 @@
 <html xmlns:th="http://www.thymeleaf.org"
 xmlns:layout="http://www.ultrq.net.nz/tyhmeleaf/layout"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
 layout:decorate="~{/layout/layout1}">
 
-<div layout:fragment="content">
+<div layout:fragment="content" th:with="uid=${#authentication.principal} eq 'anonymousUser' ? 'Guest' : ${#authentication.principal.member.uid}">
+<!-- csrf 토큰 값을 생성하기 위한 의미 없는 th 속성값 사용 -->
+<form th:action="${'/logout'}" method="post"></form>
 
 	<div class="panel-heading">List Page</div>
-
+	
 	<div class="panel-body pull-right">
-		<h3><a class="label label-default" th:href="@{register}">게시글 등록</a></h3>
+		<h3><a class="label label-primary" th:href="@{register}">게시물 등록</a></h3>
+	</div>
+	
+	<div th:if="${uid} eq 'Guest'" class="panel-body pull-right">
+		<h3><a class="label label-success" href="/login">로 그 인</a></h3>
+	</div>
+	
+	<div th:unless="${uid} eq 'Guest'" class="panel-body pull-right">
+		<h3><a id="logout" class="label label-danger" href="#">로그아웃</a></h3>
+		<form id="logout_form" method="post" th:action="@{/logout}"></form>
 	</div>
 	
 	<div class="panel-body">
@@ -120,13 +132,19 @@ layout:decorate="~{/layout/layout1}">
 			
 			formObj.submit();
 		});
+		
+		$("#logout").click(function(e) {
+			if(confirm("로그아웃 하시겠습니까?")) {
+				e.preventDefault();
+				$("#logout_form").submit();					
+			}
+		});
+		
 	});
 	
 	$(window).load(function() {
 		var msg = [[${msg}]];
 		var stateObj = null;	// 상태 객체 생성
-		
-		console.log("hisotry의 state 값 : " + history.state);
 		
 		if(!history.state) {
 			if(msg == 'success') {
