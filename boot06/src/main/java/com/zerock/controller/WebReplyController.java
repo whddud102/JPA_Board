@@ -36,7 +36,7 @@ public class WebReplyController {
 	@Autowired
 	private WebReplyRepository replyRepo;
 	
-	@Secured(value = {"BASIC", "ROLE_MANAGER", "ROLE_ADMIN"})
+	@Secured(value = {"ROLE_BASIC", "ROLE_MANAGER", "ROLE_ADMIN"})
 	@Transactional
 	@PostMapping("/{bno}")
 	public ResponseEntity<List<WebReply>> addReply(@RequestBody WebReply newReply, @PathVariable("bno") Long bno) {
@@ -54,7 +54,7 @@ public class WebReplyController {
 		return new ResponseEntity<List<WebReply>>(getListByBoard(board), HttpStatus.CREATED);
 	}
 	
-	@Secured(value = {"BASIC", "ROLE_MANAGER", "ROLE_ADMIN"})
+	@Secured(value = {"ROLE_BASIC", "ROLE_MANAGER", "ROLE_ADMIN"})
 	@Transactional
 	@DeleteMapping("/{bno}/{rno}")
 	public ResponseEntity<List<WebReply>> remove(@PathVariable("bno") Long bno, @PathVariable("rno") Long rno) {
@@ -69,7 +69,7 @@ public class WebReplyController {
 		return new ResponseEntity<List<WebReply>>(getListByBoard(board), HttpStatus.OK);
 	}
 	
-	@Secured(value = {"BASIC", "ROLE_MANAGER", "ROLE_ADMIN"})
+	@Secured(value = {"ROLE_BASIC", "ROLE_MANAGER", "ROLE_ADMIN"})
 	@Transactional
 	@PutMapping("/{bno}")
 	public ResponseEntity<List<WebReply>> modify(@PathVariable("bno") Long bno, @RequestBody WebReply reply) {
