@@ -16,6 +16,7 @@
 - JPA
 - Spring Security
 - jQuery
+- mySQL
 ---
 ## 느낀 점
 - JPA를 사용하니 SQL문 작성없이도 간단한 DB 작업이 가능하기 때문에 빠른 개발에 적합하다.
